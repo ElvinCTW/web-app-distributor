@@ -7,7 +7,7 @@ import (
 )
 
 func Restaurant(r *gin.Engine) {
-	r.GET("/app/v1/restaurant/:id", func(c *gin.Context) {
+	r.GET(appPrefix+"/restaurant/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		if r := controller.ShowRestaurant(id); r.Data == nil {
 			c.String(http.StatusNoContent, http.StatusText(http.StatusNoContent))
