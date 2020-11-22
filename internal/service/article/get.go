@@ -1,6 +1,8 @@
-package restaurant
+package article
 
-import "web-app-distributor/internal/dao/restaurantDAO"
+import (
+	"web-app-distributor/internal/dao/articleDAO"
+)
 
 type Getter struct{}
 
@@ -12,6 +14,6 @@ func Get() *Getter {
 
 func (c *Getter) ById(id string) *Data {
 	resp := &Data{}
-	resp.Data = restaurantDAO.GetDataById(id)
+	resp.Data = articleDAO.GetDataById(id)
 	return resp
 }
