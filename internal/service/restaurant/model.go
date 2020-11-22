@@ -1,33 +1,40 @@
 package restaurant
 
 import (
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"web-app-distributor/internal/dao/restaurantDAO"
 )
 
-type Restaurant struct {
-	Id        primitive.ObjectID `json:"id" bson:"_id"`
-	Info      Info
-	Dishes    []Dish
-	PictureId []string
+type Data struct {
+	*restaurantDAO.Data
 }
 
-func New(Address, City, Distinct, Genre string) Restaurant {
-	r := Restaurant{
-		Info: Info{
-			Address:  Address,
-			City:     City,
-			Distinct: Distinct,
-			Genre:    Genre,
+func New(Address, City, Distinct, Genre string) Data {
+	r := Data{
+		&restaurantDAO.Data{
+			Info: restaurantDAO.Info{
+				Address:  Address,
+				City:     City,
+				Distinct: Distinct,
+				Genre:    Genre,
+			},
+			Dishes:    []restaurantDAO.Dish{},
+			PictureId: []string{},
 		},
-		Dishes:    []Dish{},
-		PictureId: []string{},
 	}
 
 	return r
 }
 
+func Get() *Getter {
+	return getter
+}
+
+func (c *Data) Save() string {
+	return restaurantDAO.Create(c.Data)
+}
+
 // todo
-func (c *Restaurant) AddDishPicture() error {
+func (c *Data) AddDishPicture() error {
 	if err := addDishes(); err != nil {
 		return err
 	} else if err = addPicutures(); err != nil {
@@ -47,31 +54,17 @@ func addPicutures() error {
 	return nil
 }
 
-func (c *Restaurant) GetDishesString() string {
+func (c *Data) StringRestaurantInfo() string {
+	return "[" + c.Info.City + "。" + c.Info.Distinct + "。" + c.Info.Genre + "]\n"
+}
+
+func (c *Data) StringDishes() string {
 	var s string
 	for _, d := range c.Dishes {
-		s = s + d.String()
+		s = s + getDishString(d)
 	}
 	return s
 }
-
-type Info struct {
-	Address  string
-	City     string
-	Distinct string
-	Genre    string
-}
-
-func (c *Info) String() string {
-	return "[" + c.City + "。" + c.Distinct + "。" + c.Genre + "]\n"
-}
-
-type Dish struct {
-	Name      string
-	Price     string
-	PictureId []string
-}
-
-func (c *Dish) String() string {
-	return "- " + c.Name + " $" + c.Price + "\n"
+func getDishString(d restaurantDAO.Dish) string {
+	return "- " + d.Name + " $" + d.Price + "\n"
 }

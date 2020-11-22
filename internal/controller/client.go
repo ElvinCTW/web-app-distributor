@@ -1,7 +1,7 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import "web-app-distributor/internal/service/restaurant"
 
-func Set(r *gin.Engine) {
-
+func ShowRestaurant(id string) restaurant.Data {
+	return restaurant.Get().ById(id)
 }

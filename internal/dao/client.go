@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"web-app-distributor/config"
 	"web-app-distributor/internal/dao/articleDAO"
+	"web-app-distributor/internal/dao/restaurantDAO"
 )
 
 var c = config.Get()
@@ -16,5 +17,6 @@ func Init() {
 	} else {
 		db := client.Database(c.Database)
 		articleDAO.Init(db)
+		restaurantDAO.Init(db)
 	}
 }

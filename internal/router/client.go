@@ -11,4 +11,5 @@ var log = logger.Get()
 func Init(r *gin.Engine) {
 	service.Init()
 	Article(r)
+	Restaurant(r)
 }
