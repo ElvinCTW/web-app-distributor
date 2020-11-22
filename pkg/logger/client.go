@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	"time"
 )
 
 var (
@@ -29,7 +28,7 @@ func Init(level string) {
 			return arr[len(arr)-1]
 		}
 		customFormatter := &logrus.TextFormatter{
-			TimestampFormat: time.RFC3339Nano,
+			TimestampFormat: "2006-01-02 15:04:05.000",
 			FullTimestamp:   true,
 			CallerPrettyfier: func(f *runtime.Frame) (string, string) {
 				return "", fmt.Sprintf("%s:%d", callerFormatter(f.File), f.Line)
@@ -43,10 +42,7 @@ func Init(level string) {
 		}
 		logrus.SetFormatter(customFormatter)
 		logrus.SetReportCaller(false)
-		instance = &Logger{
-			logrus.New(),
-		}
-
+		instance = &Logger{}
 		instance.Debug("logger initialized")
 	})
 }
@@ -55,30 +51,28 @@ func Get() *Logger {
 	return instance
 }
 
-type Logger struct {
-	*logrus.Logger
-}
+type Logger struct{}
 
 func (l *Logger) Debug(args ...interface{}) {
-	l.Logger.Debug(args)
+	logrus.Debug(args)
 }
 
 func (l *Logger) Info(args ...interface{}) {
-	l.Logger.Info(args)
+	logrus.Info(args)
 }
 
 func (l *Logger) Warn(args ...interface{}) {
-	l.Logger.Warn(args)
+	logrus.Warn(args)
 }
 
 func (l *Logger) Error(args ...interface{}) {
-	l.Logger.Error(args)
+	logrus.Error(args)
 }
 
 func (l *Logger) Fatal(args ...interface{}) {
-	l.Logger.Fatal(args)
+	logrus.Fatal(args)
 }
 
 func (l *Logger) Panic(args ...interface{}) {
-	l.Logger.Panic(args)
+	logrus.Panic(args)
 }
