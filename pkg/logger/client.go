@@ -60,25 +60,25 @@ type Logger struct {
 }
 
 func (l *Logger) Debug(args ...interface{}) {
-	l.Debug(args)
+	l.Logger.Debug(args)
 }
 
 func (l *Logger) Info(args ...interface{}) {
-	l.Info(args)
+	l.Logger.Info(args)
 }
 
 func (l *Logger) Warn(args ...interface{}) {
-	l.Warn(args)
+	l.Logger.Warn(args)
 }
 
 func (l *Logger) Error(args ...interface{}) {
-	l.Error(args)
+	l.Logger.Error(args)
 }
 
 func (l *Logger) Fatal(args ...interface{}) {
-	l.Fatal(args)
+	l.Logger.Fatal(args)
 }
 
 func (l *Logger) Panic(args ...interface{}) {
-	l.Panic(args)
+	l.Logger.Panic(args)
 }
