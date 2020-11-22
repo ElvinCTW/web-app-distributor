@@ -6,7 +6,7 @@ import (
 )
 
 type Article struct {
-	*articleDAO.Article
+	*articleDAO.Data
 }
 
 func (c *Article) SetRestaurant() error {
@@ -28,6 +28,6 @@ func (c *Article) GetContent() string {
 
 func Get(id string) Article {
 	return Article{
-		Article: articleDAO.Get(id),
+		Data: articleDAO.Get(id),
 	}
 }

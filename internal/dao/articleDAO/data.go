@@ -18,14 +18,14 @@ func Init(db *mongo.Database) {
 	col = db.Collection(CollectionName)
 }
 
-type Article struct {
+type Data struct {
 	Id           primitive.ObjectID `json:"id" bson:"_id"`
 	RestaurantId primitive.ObjectID `json:"restaurantId" bson:"restaurantId"`
 	Comment      string
 	Stars        float64
 }
 
-func Get(id string) *Article {
+func Get(id string) *Data {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil
@@ -33,7 +33,7 @@ func Get(id string) *Article {
 
 	ctx := context.Background()
 	filter := bson.M{"_id": oid}
-	data := new(Article)
+	data := new(Data)
 	if err := col.FindOne(ctx, filter).Decode(data); err != nil && err == mongo.ErrNoDocuments {
 		return nil
 	} else if err != nil {
