@@ -19,6 +19,7 @@ type Data struct {
 	DATABASE_URL string
 	DATABASE     string
 	LOG_LEVEL    string
+	API_VERSION  string
 }
 
 func Get() *Data {
