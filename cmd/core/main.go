@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,8 +10,6 @@ import (
 func main() {
 	logger.Init(config.Get().LogLevel)
 	r := gin.Default()
-	router.Set(r)
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
+	router.Init(r)
 	r.Run(":8080")
 }

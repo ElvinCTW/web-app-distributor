@@ -15,6 +15,6 @@ func Init() {
 		panic(err.Error())
 	} else {
 		db := client.Database(c.Database)
-		articleDAO.Init(db.Collection(articleDAO.CollectionName))
+		articleDAO.Init(db)
 	}
 }

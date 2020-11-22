@@ -4,15 +4,27 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"os"
+	"sync"
 )
 
-const path = "../.env"
+const devPath = "dev.env"
 
-var data *Data
+var (
+	data *Data
+	once sync.Once
+)
 
-func init() {
-	if err := godotenv.Load(path); err != nil {
+func Get() *Data {
+	once.Do(func() {
+		load()
+	})
+	return data
+}
+
+func load() {
+	if err := godotenv.Load(devPath); err != nil {
 		fmt.Println("not used .env")
+		panic(err)
 	}
 
 	data = &Data{
@@ -20,14 +32,14 @@ func init() {
 		Database:    os.Getenv("DATABASE"),
 		LogLevel:    os.Getenv("LOG_LEVEL"),
 	}
+
+	fmt.Println("DATABASE_URL:", data.DatabaseURL)
+	fmt.Println("DATABASE:", data.Database)
+	fmt.Println("LOG_LEVEL:", data.LogLevel)
 }
 
 type Data struct {
 	DatabaseURL string
 	Database    string
 	LogLevel    string
-}
-
-func Get() *Data {
-	return data
 }

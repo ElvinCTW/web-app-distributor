@@ -1,11 +1,13 @@
 package service
 
 import (
-	"web-app-distributor/config"
 	"web-app-distributor/internal/dao"
+	"web-app-distributor/pkg/logger"
 )
 
-var c = config.Get()
+var (
+	log = logger.Get()
+)
 
 func Init() {
 	dao.Init()
