@@ -15,13 +15,14 @@ func GetDataById(id string) *Data {
 
 	ctx := context.Background()
 	filter := bson.M{"_id": oid}
-	data := new(Data)
-	if err := col.FindOne(ctx, filter).Decode(data); err != nil && err == mongo.ErrNoDocuments {
+	d := new(data)
+	if err := col.FindOne(ctx, filter).Decode(d); err != nil && err == mongo.ErrNoDocuments {
 		return nil
 	} else if err != nil {
 		log.Error(err)
 		return nil
 	} else {
-		return data
+		d.Data.Id = d.Oid.Hex()
+		return d.Data
 	}
 }

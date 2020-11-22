@@ -19,13 +19,19 @@ func Init(db *mongo.Database) {
 }
 
 type Data struct {
-	Id           primitive.ObjectID `json:"id" bson:"_id"`
-	RestaurantId primitive.ObjectID `json:"restaurantId" bson:"restaurantId"`
-	Comment      string
-	Stars        float64
+	Id           string  `json:"id"`
+	RestaurantId string  `json:"restaurantId"`
+	Comment      string  `json:"comment" bson:"comment"`
+	Stars        float64 `json:"stars" bson:"stars"`
 }
 
-func Get(id string) *Data {
+type data struct {
+	Oid           primitive.ObjectID `bson:"_id"`
+	RestaurantOid primitive.ObjectID `bson:"restaurantOid"`
+	*Data
+}
+
+func GetDataById(id string) *Data {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil
@@ -33,13 +39,15 @@ func Get(id string) *Data {
 
 	ctx := context.Background()
 	filter := bson.M{"_id": oid}
-	data := new(Data)
-	if err := col.FindOne(ctx, filter).Decode(data); err != nil && err == mongo.ErrNoDocuments {
+	d := new(data)
+	if err := col.FindOne(ctx, filter).Decode(d); err != nil && err == mongo.ErrNoDocuments {
 		return nil
 	} else if err != nil {
 		log.Error(err)
 		return nil
 	} else {
-		return data
+		d.Data.Id = d.Oid.Hex()
+		d.Data.RestaurantId = d.RestaurantOid.Hex()
+		return d.Data
 	}
 }
