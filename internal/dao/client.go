@@ -12,10 +12,10 @@ import (
 var c = config.Get()
 
 func Init() {
-	if client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(c.DatabaseURL)); err != nil {
+	if client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(c.DATABASE_URL)); err != nil {
 		panic(err.Error())
 	} else {
-		db := client.Database(c.Database)
+		db := client.Database(c.DATABASE)
 		articleDAO.Init(db)
 		restaurantDAO.Init(db)
 	}

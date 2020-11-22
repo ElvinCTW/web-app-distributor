@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	logger.Init(config.Get().LogLevel)
+	logger.Init(config.Get().LOG_LEVEL)
 	r := gin.Default()
 	router.Init(r)
 	r.Run(":8080")

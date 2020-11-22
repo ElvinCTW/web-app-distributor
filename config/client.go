@@ -4,15 +4,22 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"os"
+	"reflect"
 	"sync"
 )
 
 const devPath = "dev.env"
 
 var (
-	data *Data
+	data = &Data{}
 	once sync.Once
 )
+
+type Data struct {
+	DATABASE_URL string
+	DATABASE     string
+	LOG_LEVEL    string
+}
 
 func Get() *Data {
 	once.Do(func() {
@@ -27,19 +34,17 @@ func load() {
 		panic(err)
 	}
 
-	data = &Data{
-		DatabaseURL: os.Getenv("DATABASE_URL"),
-		Database:    os.Getenv("DATABASE"),
-		LogLevel:    os.Getenv("LOG_LEVEL"),
-	}
-
-	fmt.Println("DATABASE_URL:", data.DatabaseURL)
-	fmt.Println("DATABASE:", data.Database)
-	fmt.Println("LOG_LEVEL:", data.LogLevel)
+	insert()
 }
 
-type Data struct {
-	DatabaseURL string
-	Database    string
-	LogLevel    string
+func insert() {
+	typeofConfig := reflect.TypeOf(*data)
+
+	for i := 0; i < typeofConfig.NumField(); i++ {
+		fName := typeofConfig.Field(i).Name
+		v := os.Getenv(fName)
+		value := reflect.ValueOf(v)
+		reflect.ValueOf(data).Elem().FieldByName(fName).Set(value)
+		fmt.Println(fName, "=", value)
+	}
 }
